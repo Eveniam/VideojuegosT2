@@ -5,11 +5,21 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private int Puntaje = 0;
+    private int Muertes = 0;
+    private int Llave = 0;
     private int Vidas = 3;
     // Start is called before the first frame update
     
     public void GanarPuntos() {
-        Puntaje +=1;
+        Puntaje -= 1;
+    }
+
+    public void CantMuertes(){
+        Muertes += 1;
+    }
+
+    public void CantLlave(){
+        Llave += 1;
     }
 
     public void PerderVidas() {
@@ -19,6 +29,12 @@ public class GameManager : MonoBehaviour
 
     public int GetPuntaje() {
         return Puntaje;
+    }
+    public int GetAsesinatos() {
+        return Muertes;
+    }
+    public int GetLlave() {
+        return Llave;
     }
 
     public int GetVidas() {

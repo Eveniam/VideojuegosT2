@@ -18,7 +18,6 @@ public class BalaController : MonoBehaviour
         var uim = gameManager.GetComponent<UiManager>();
         gm.GanarPuntos();
         uim.PrintPuntaje(gm.GetPuntaje());
-
         Destroy(this.gameObject, 5);
     }
 
@@ -35,6 +34,7 @@ public class BalaController : MonoBehaviour
     }
 
     void OnCollisionEnter2D(Collision2D other){
+        
         if(other.gameObject.tag == "Enemy"){
             Destroy(gameObject);
         }

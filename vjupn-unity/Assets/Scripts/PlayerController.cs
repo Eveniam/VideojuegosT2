@@ -19,16 +19,17 @@ public class PlayerController : MonoBehaviour
     private Transform balaTransform;
 
     private bool MoverA = false;
-    
+    private int cantVida = 2;
 
     private bool balaExiste = false;
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        sp = GetComponent<SpriteRenderer>();
-        audioSource = GetComponent<AudioSource>();
+      
+      rb = GetComponent<Rigidbody2D>();
+      sp = GetComponent<SpriteRenderer>();
+      audioSource = GetComponent<AudioSource>();
 
-        //SceneManager.LoadScene("Scene2");
+     // SceneManager.LoadScene("Scene2");
 
     }
 
@@ -53,7 +54,7 @@ public class PlayerController : MonoBehaviour
         DividirDisparo();
     }
 
-
+  //BOTONES START
     public void MoverArriba(){
       if(MoverA) rb.velocity = new Vector2(rb.velocity.x, 10);
 
@@ -74,28 +75,46 @@ public class PlayerController : MonoBehaviour
       if(direccion == -1) sp.flipX = true;
       else sp.flipX = false;
     }
-
+  //END
     private void Saltar() {
       if(Input.GetKeyUp(KeyCode.Space)) {
         ReproducirSonidoSalto();
       }
     }
 
+  //COLISIONES START
     void OnCollisionEnter2D(Collision2D other){
       Debug.Log(tag);
-      if(other.gameObject.tag == "Piso") MoverA = true;
-      if(other.gameObject.tag == "Enemy") Destroy(gameObject);
+      MoverA = true;
+
+
+      cantVida -= 1;
+      if(other.gameObject.tag == "Enemy")
+      {
+        if(cantVida < 1){
+          Destroy(gameObject);
+          gameManager = GameObject.Find("GameManager");
+
+          var gm = gameManager.GetComponent<GameManager>();
+          var uim = gameManager.GetComponent<UiManager>();
+          gm.GanarPuntos();
+          uim.PrintPuntaje(gm.GetPuntaje());
+        }
+       
+      }
     }
 
     void OnCollisionExit2D(Collision2D other){
       Debug.Log(tag);
       MoverA = false;
     }
+    //END
 
     public void ReproducirSonidoSalto() {
       audioSource.PlayOneShot(audios[0]);
     }
 
+  //BOTONES DE DISPARO START
     public void DispararBoton(){
       balaExiste = true;
       var position = transform.position;
@@ -103,7 +122,6 @@ public class PlayerController : MonoBehaviour
       var newPosition = new Vector3(x, position.y, position.z);
       GameObject balaGenerada = Instantiate(bala, newPosition, Quaternion.identity);
       balaTransform = balaGenerada.transform;
-      GanarPuntos();
     }
 
     public void DividirDisparoBoton(){
@@ -122,6 +140,7 @@ public class PlayerController : MonoBehaviour
         (balaGenerada3.GetComponent<BalaController>()).velocityY = -1;
       }
     }
+  //END
 
     private void Disparar() {
 
